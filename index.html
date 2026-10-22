@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      HISTORIAN QUEST - Sejarah, Manusia, Ruang, dan Waktu untuk Meningkatkan
+      Kemampuan Berpikir Historis Siswa Kelas VIII SMP
+    </title>
+    <!-- Tailwind CSS CDN -->
+    <script src="tailwind.config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Fredoka:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body
+    class="batik-bg min-h-screen text-slate-100 flex flex-col justify-between selection:bg-yellow-400 selection:text-slate-900"
+  >
+    <!-- TOP HEADER / NAVBAR (Exact Canvas Screenshot Style) -->
+    <header
+      class="sticky top-0 z-40 glass-panel border-b border-yellow-500/40 px-4 py-3"
+    >
+      <div class="max-w-6xl mx-auto flex items-center justify-between">
+        <!-- Brand Title -->
+        <div
+          class="flex items-center space-x-3 cursor-pointer"
+          onclick="app.showScreen('home')"
+        >
+          <div
+            class="w-11 h-11 rounded-full bg-gradient-to-tr from-yellow-500 via-amber-400 to-emerald-500 flex items-center justify-center shadow-lg border-2 border-yellow-300"
+          >
+            <i class="fa-solid fa-compass text-slate-900 text-xl"></i>
+          </div>
+          <div>
+            <h1
+              class="font-cinzel text-base md:text-xl font-bold tracking-wider text-yellow-400 flex items-center gap-2"
+            >
+              HISTORIAN QUEST
+            </h1>
+            <p
+              class="text-xs text-emerald-200 font-fredoka flex items-center gap-1"
+            >
+              Sejarah, Manusia, Ruang, dan Waktu untuk Meningkatkan Kemampuan
+              Berpikir Historis Siswa Kelas VIII SMP
+              <span class="text-xs">🏛️</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Player Stats Bar & Quick Controls -->
+        <div
+          class="flex items-center space-x-2 md:space-x-3 text-xs md:text-sm font-fredoka"
+        >
+          <!-- Player Profile Button -->
+          <button
+            onclick="app.openProfileModal()"
+            class="flex items-center gap-2 bg-emerald-900/90 hover:bg-emerald-800 px-3.5 py-1.5 rounded-full border border-yellow-400/50 shadow-md transition"
+          >
+            <div
+              id="header-avatar-badge"
+              class="w-6 h-6 rounded-full bg-yellow-400 text-slate-900 flex items-center justify-center font-bold text-xs"
+            >
+              👦
+            </div>
+            <span
+              id="header-player-name"
+              class="font-bold text-yellow-300 truncate max-w-[80px] md:max-w-[120px]"
+              >Penjelajah</span
+            >
+            <i class="fa-solid fa-gear text-xs text-yellow-400/80"></i>
+          </button>
+
+          <!-- XP Badge -->
+          <div
+            class="flex items-center bg-emerald-950/90 px-3 py-1.5 rounded-full border border-yellow-500/30"
+          >
+            <i class="fa-solid fa-bolt text-yellow-400 mr-1.5"></i>
+            <span id="player-xp" class="font-bold text-yellow-300">0</span>
+            <span class="text-[10px] text-emerald-300 ml-1">XP</span>
+          </div>
+
+          <!-- Navigation Controls -->
+          <button
+            onclick="app.showScreen('map')"
+            class="bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-300 w-9 h-9 rounded-xl border border-yellow-500/40 flex items-center justify-center"
+            title="Peta Misi 9 Situs"
+          >
+            <i class="fa-solid fa-map-location-dot"></i>
+          </button>
+          <button
+            onclick="app.showScreen('gallery')"
+            class="bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-300 w-9 h-9 rounded-xl border border-yellow-500/40 flex items-center justify-center"
+            title="Galeri Dokumentasi Situs"
+          >
+            <i class="fa-solid fa-images"></i>
+          </button>
+          <button
+            onclick="app.showScreen('collection')"
+            class="bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-300 w-9 h-9 rounded-xl border border-yellow-500/40 flex items-center justify-center"
+            title="Koleksi Cagar Budaya"
+          >
+            <i class="fa-solid fa-trophy"></i>
+          </button>
+          <button
+            id="sound-btn"
+            onclick="app.toggleSound()"
+            class="bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-300 w-9 h-9 rounded-xl border border-yellow-500/40 flex items-center justify-center"
+            title="Efek Suara"
+          >
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main
+      id="main-container"
+      class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow flex flex-col justify-center"
+    >
+      <!-- 1. HOME DASHBOARD SCREEN -->
+      <section id="screen-home" class="screen-view space-y-8 text-center py-4">
+        <div class="space-y-4">
+          <span
+            class="inline-block px-5 py-1.5 rounded-full bg-yellow-500/20 text-yellow-300 border border-yellow-400/50 text-xs md:text-sm font-semibold tracking-wide shadow-inner"
+          >
+            📍 Petualangan Edukasi Cagar Budaya Kabupaten Ngawi
+          </span>
+          <h2
+            class="text-3xl md:text-5xl font-extrabold font-cinzel text-yellow-400 tracking-wide"
+          >
+            SELAMAT DATANG,
+            <span
+              id="home-greeting-name"
+              class="underline decoration-yellow-400"
+              >PENJELAJAH</span
+            >!
+          </h2>
+          <p
+            class="text-emerald-100 max-w-2xl mx-auto text-xs md:text-sm leading-relaxed opacity-90"
+          >
+            Jelajahi
+            <span class="text-yellow-300 font-bold"
+              >9 Situs Sejarah Utama di Kabupaten Ngawi</span
+            >
+            dari era Pra Sejarah, Hindu-Buddha, Kesultanan Islam, hingga Benteng
+            Kolonial Belanda. Jawab kuis ilmiah dan kumpulkan seluruh kartu
+            koleksinya!
+          </p>
+        </div>
+
+        <!-- Avatar Preview Hero -->
+        <div class="flex flex-col items-center justify-center my-4">
+          <div class="relative w-44 h-44 md:w-52 md:h-52 animate-float">
+            <div
+              class="absolute inset-0 bg-yellow-500/20 rounded-full blur-2xl animate-pulse"
+            ></div>
+            <div
+              id="hero-character-svg-container"
+              class="w-full h-full relative z-10 flex items-center justify-center"
+            >
+              <!-- SVG Avatar rendered dynamically -->
+            </div>
+          </div>
+
+          <button
+            onclick="app.openProfileModal()"
+            class="mt-3 bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-300 font-bold px-4 py-1.5 rounded-full text-xs border border-yellow-400/40 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-user-gear"></i> Karakter:
+            <span id="home-character-title">Putera</span> (Klik untuk Ganti)
+          </button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div
+          class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto"
+        >
+          <button
+            onclick="app.startMainJourney()"
+            class="btn-3d-gold w-full text-slate-950 font-extrabold text-base md:text-lg px-8 py-4 rounded-2xl flex items-center justify-center gap-3"
+          >
+            <i class="fa-solid fa-play text-xl"></i> MULAI PETUALANGAN
+          </button>
+          <button
+            onclick="app.showScreen('map')"
+            class="btn-3d-emerald w-full text-white font-bold text-sm md:text-base px-6 py-4 rounded-2xl flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-map"></i> Lihat Peta 9 Situs
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. MAP SCREEN (Interactive SVG Bezier Path + Animated Character) -->
+      <section id="screen-map" class="screen-view hidden space-y-6">
+        <div
+          class="flex items-center justify-between glass-panel p-4 rounded-2xl"
+        >
+          <div>
+            <h2
+              class="text-lg md:text-xl font-bold font-cinzel text-yellow-400 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-map-marked-alt"></i> Peta Jalur Petualangan
+              9 Situs Sejarah Ngawi
+            </h2>
+            <p class="text-xs text-emerald-200">
+              Selesaikan setiap situs secara runtut dengan menjawab minimal 4
+              dari 5 kuis benar!
+            </p>
+          </div>
+          <button
+            onclick="app.showScreen('home')"
+            class="text-emerald-300 hover:text-white px-3.5 py-1.5 rounded-xl bg-emerald-900/80 border border-emerald-700 text-xs font-semibold"
+          >
+            <i class="fa-solid fa-house mr-1"></i> Beranda
+          </button>
+        </div>
+
+        <!-- Map Container with Vector Path -->
+        <div
+          class="relative glass-panel rounded-3xl p-3 md:p-6 overflow-hidden min-h-[500px] flex flex-col justify-center"
+        >
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-emerald-950/60 to-teal-950/90 pointer-events-none"
+          ></div>
+
+          <!-- Winding SVG Path across 9 Sites -->
+          <svg
+            id="map-path-svg"
+            class="w-full h-80 md:h-[420px] relative z-10"
+            viewBox="0 0 1000 500"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <!-- Smooth Winding Bezier Path Line -->
+            <path
+              id="archipelago-path"
+              d="M 80 420 C 180 320, 220 380, 280 260 C 340 140, 420 180, 480 300 C 540 420, 620 380, 680 260 C 740 140, 820 180, 880 320 C 920 400, 940 180, 800 100 C 660 20, 500 60, 350 80"
+              fill="none"
+              stroke="#facc15"
+              stroke-width="5"
+              stroke-dasharray="8 6"
+              opacity="0.85"
+            />
+
+            <!-- Dynamic Level Nodes Group -->
+            <g id="map-nodes-group"></g>
+
+            <!-- Animated Map Character Container -->
+            <g
+              id="map-character-container"
+              class="transition-transform duration-300"
+              transform="translate(80, 420)"
+            >
+              <g transform="translate(-25, -55) scale(0.28)">
+                <g class="walking-legs" id="map-character-svg-wrapper">
+                  <!-- Dynamic Avatar SVG inserted here -->
+                </g>
+              </g>
+            </g>
+          </svg>
+
+          <!-- Map Legend -->
+          <div
+            class="relative z-20 mt-3 bg-emerald-950/95 p-3 rounded-xl border border-emerald-700/60 flex flex-wrap items-center justify-between gap-2 text-xs"
+          >
+            <div class="flex items-center gap-3">
+              <span
+                ><span
+                  class="w-3 h-3 rounded-full bg-yellow-400 inline-block mr-1"
+                ></span>
+                Aktif</span
+              >
+              <span
+                ><span
+                  class="w-3 h-3 rounded-full bg-emerald-500 inline-block mr-1"
+                ></span>
+                Lulus</span
+              >
+              <span
+                ><span
+                  class="w-3 h-3 rounded-full bg-slate-600 inline-block mr-1"
+                ></span>
+                Terkunci</span
+              >
+            </div>
+            <div id="map-status-text" class="text-yellow-300 font-bold">
+              Ikuti jalur bertitik untuk menjelajahi situs!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MATERIAL READ & QUIZ SCREEN -->
+      <section id="screen-quiz" class="screen-view hidden space-y-5">
+        <!-- Top Action Header (WITH "KEMBALI KE PETA/HOME" BUTTON) -->
+        <div
+          class="glass-panel rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div class="flex items-center space-x-3 w-full md:w-auto">
+            <button
+              onclick="app.exitQuizToMap()"
+              class="bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-300 font-bold px-3.5 py-2 rounded-xl border border-yellow-400/50 text-xs flex items-center gap-2 shadow-md transition"
+            >
+              <i class="fa-solid fa-arrow-left"></i> Kembali ke Peta / Home
+            </button>
+            <div class="flex items-center gap-2">
+              <span id="quiz-site-badge" class="text-2xl">🏛️</span>
+              <div>
+                <span
+                  id="quiz-site-level"
+                  class="text-[10px] uppercase font-bold text-yellow-400 bg-emerald-950 px-2 py-0.5 rounded border border-yellow-500/30"
+                  >SITUS 1 / 9</span
+                >
+                <h2
+                  id="quiz-site-title"
+                  class="text-sm md:text-base font-extrabold text-white font-cinzel"
+                >
+                  Museum Trinil
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timer & Progress Bar -->
+          <div
+            class="flex items-center space-x-4 w-full md:w-auto justify-between md:justify-end"
+          >
+            <!-- Timer Pill -->
+            <div
+              class="flex items-center bg-slate-950/90 px-3.5 py-1.5 rounded-full border border-yellow-500/50 text-yellow-400 font-bold text-sm"
+            >
+              <i class="fa-solid fa-clock mr-1.5 animate-pulse"></i>
+              <span id="quiz-timer-text">25s</span>
+            </div>
+
+            <!-- Progress -->
+            <div class="text-right">
+              <div class="text-[10px] text-emerald-300">
+                Soal
+                <span id="quiz-progress-text" class="font-bold text-yellow-300"
+                  >1 / 5</span
+                >
+              </div>
+              <div
+                class="w-28 bg-emerald-950 rounded-full h-2.5 border border-emerald-700/60 overflow-hidden mt-1"
+              >
+                <div
+                  id="quiz-progress-bar"
+                  class="bg-gradient-to-r from-yellow-500 to-amber-400 h-full w-1/5 transition-all duration-300"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SITE MATERIAL & BUILT-IN PHOTO SUMMARY COLLAPSIBLE CARD -->
+        <div
+          class="glass-panel rounded-2xl p-4 md:p-5 border border-yellow-500/30 space-y-3"
+        >
+          <div class="flex items-center justify-between">
+            <button
+              onclick="app.toggleMaterialSummary()"
+              class="text-xs font-bold text-yellow-300 hover:text-yellow-200 flex items-center gap-2"
+            >
+              <i id="material-toggle-icon" class="fa-solid fa-chevron-down"></i>
+              📖
+              <span id="material-toggle-text"
+                >Tampilkan Ringkasan Materi Ilmiah Situs Ini</span
+              >
+            </button>
+            <span class="text-[11px] text-emerald-300 italic"
+              >Foto Bawaan Resmi Situs</span
+            >
+          </div>
+
+          <!-- Built-In Photo & Text Summary -->
+          <div
+            id="site-material-content"
+            class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-emerald-700/50"
+          >
+            <!-- Built-in Photo Placeholder -->
+            <div
+              class="relative rounded-xl overflow-hidden border border-yellow-400/40 h-48 md:h-full min-h-[160px] bg-slate-950"
+            >
+              <img
+                id="site-display-img"
+                src=""
+                alt="Foto situs sejarah Ngawi"
+                class="w-full h-full object-cover"
+                style="display: none"
+              />
+              <div
+                id="site-photo-placeholder"
+                class="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center text-emerald-200 p-4"
+              >
+                <i class="fa-solid fa-camera text-3xl text-yellow-300"></i>
+                <span class="text-xs font-bold"
+                  >Foto situs belum ditambahkan</span
+                >
+                <span class="text-[10px]">Kamu bisa mengisi foto sendiri</span>
+              </div>
+              <label
+                class="absolute bottom-2 inset-x-2 bg-slate-950/90 hover:bg-slate-900 px-2 py-2 rounded-lg text-[10px] text-yellow-300 text-center cursor-pointer border border-yellow-400/40"
+              >
+                <i class="fa-solid fa-upload mr-1"></i> Tambah / Ganti Foto
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  onchange="app.uploadSitePhoto(event)"
+                />
+              </label>
+            </div>
+            <!-- Detailed Text Summary -->
+            <div
+              id="site-display-summary"
+              class="md:col-span-2 text-xs text-emerald-100 leading-relaxed max-h-56 overflow-y-auto pr-2 space-y-2"
+            >
+              <!-- Loaded dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div
+          class="glass-panel rounded-3xl p-5 md:p-7 space-y-5 border border-yellow-500/40"
+        >
+          <div class="space-y-2">
+            <span
+              id="quiz-cat-tag"
+              class="inline-block px-3 py-1 rounded-full bg-emerald-800 text-emerald-200 text-xs font-semibold"
+            >
+              📚 Topik Penelitian
+            </span>
+            <h3
+              id="quiz-question-text"
+              class="text-base md:text-xl font-bold leading-relaxed text-yellow-100"
+            >
+              Memuat pertanyaan...
+            </h3>
+          </div>
+
+          <!-- Options List -->
+          <div id="quiz-options-container" class="grid grid-cols-1 gap-3 pt-1">
+            <!-- Dynamic option buttons -->
+          </div>
+        </div>
+
+        <!-- Educational Feedback Box -->
+        <div
+          id="quiz-feedback-box"
+          class="hidden glass-panel rounded-2xl p-4 md:p-5 border-2 border-yellow-400 space-y-3"
+        >
+          <div class="flex items-start space-x-3">
+            <div id="feedback-icon" class="text-2xl md:text-3xl"></div>
+            <div class="space-y-1">
+              <h4
+                id="feedback-title"
+                class="text-base md:text-lg font-bold"
+              ></h4>
+              <p
+                id="feedback-explanation"
+                class="text-xs md:text-sm text-emerald-100 leading-relaxed"
+              ></p>
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button
+              id="feedback-next-btn"
+              onclick="app.nextQuestion()"
+              class="btn-3d-gold px-5 py-2 rounded-xl font-bold text-slate-950 text-xs md:text-sm flex items-center gap-2"
+            >
+              Lanjut <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. LEVEL RESULT / PASS & FAIL SCREEN -->
+      <section
+        id="screen-result"
+        class="screen-view hidden space-y-6 text-center py-4"
+      >
+        <!-- PASS RESULT CARD -->
+        <div
+          id="result-pass-card"
+          class="hidden glass-panel rounded-3xl p-6 md:p-8 max-w-lg mx-auto space-y-5 border-2 border-yellow-400 shadow-2xl relative overflow-hidden"
+        >
+          <div class="space-y-1">
+            <span
+              class="text-xs font-bold uppercase tracking-widest text-emerald-300"
+              >MISI SELESAI & LULUS! 🎉</span
+            >
+            <h2
+              id="pass-site-name"
+              class="text-2xl md:text-3xl font-extrabold font-cinzel text-yellow-400"
+            >
+              Museum Trinil
+            </h2>
+          </div>
+
+          <!-- Stars Display -->
+          <div
+            id="pass-stars-box"
+            class="flex justify-center space-x-2 text-3xl md:text-4xl text-yellow-400"
+          >
+            <i class="fa-solid fa-star animate-bounce"></i>
+            <i
+              class="fa-solid fa-star animate-bounce"
+              style="animation-delay: 0.15s"
+            ></i>
+            <i
+              class="fa-solid fa-star animate-bounce"
+              style="animation-delay: 0.3s"
+            ></i>
+          </div>
+
+          <div
+            class="grid grid-cols-2 gap-3 bg-emerald-950/90 p-3.5 rounded-2xl border border-emerald-700/60 text-xs"
+          >
+            <div>
+              <div class="text-emerald-300">Skor Benar</div>
+              <div
+                id="pass-score"
+                class="text-xl font-bold text-yellow-300 font-fredoka"
+              >
+                5 / 5
+              </div>
+            </div>
+            <div>
+              <div class="text-emerald-300">XP Diperoleh</div>
+              <div
+                id="pass-xp"
+                class="text-xl font-bold text-yellow-300 font-fredoka"
+              >
+                +150 XP
+              </div>
+            </div>
+          </div>
+
+          <!-- Unlocked Cultural Card Preview -->
+          <div
+            class="bg-yellow-500/10 border border-yellow-500/40 p-3.5 rounded-2xl text-left flex items-center space-x-3"
+          >
+            <div
+              id="pass-card-icon"
+              class="text-3xl bg-yellow-500/20 p-2.5 rounded-xl"
+            >
+              🏛️
+            </div>
+            <div class="text-xs space-y-0.5">
+              <div class="text-yellow-400 font-bold uppercase">
+                Kartu Warisan Sejarah Terbuka!
+              </div>
+              <div id="pass-card-title" class="font-bold text-white text-sm">
+                Museum Trinil
+              </div>
+              <div id="pass-card-desc" class="text-emerald-200 line-clamp-2">
+                Ekskavasi Dubois & Fosil Homo erectus...
+              </div>
+            </div>
+          </div>
+
+          <button
+            onclick="app.proceedToNextLevelTransition()"
+            class="btn-3d-gold w-full py-3.5 rounded-2xl font-extrabold text-slate-950 text-sm md:text-base flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-person-walking-arrow-right text-lg"></i>
+            BERJALAN KE SITUS BERIKUTNYA
+          </button>
+        </div>
+
+        <!-- FAIL RESULT CARD -->
+        <div
+          id="result-fail-card"
+          class="hidden glass-panel rounded-3xl p-6 md:p-8 max-w-lg mx-auto space-y-5 border-2 border-red-500/80 shadow-2xl"
+        >
+          <div class="space-y-2">
+            <div class="text-4xl">❌</div>
+            <span
+              class="text-xs font-bold uppercase tracking-widest text-red-300"
+              >BELUM LULUS KUIS</span
+            >
+            <h2
+              id="fail-site-name"
+              class="text-2xl font-bold font-cinzel text-yellow-300"
+            >
+              Museum Trinil
+            </h2>
+            <p class="text-xs text-emerald-100 max-w-sm mx-auto">
+              Syarat lulus minimal menjawab
+              <span class="text-yellow-300 font-bold"
+                >4 dari 5 soal benar (≥ 80%)</span
+              >. Kamu hanya menjawab
+              <span id="fail-score-text" class="text-red-400 font-bold"
+                >2/5</span
+              >.
+            </p>
+          </div>
+
+          <button
+            onclick="app.retryCurrentLevel()"
+            class="btn-3d-gold w-full py-3.5 rounded-2xl font-extrabold text-slate-950 text-sm flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-rotate-right text-lg"></i>
+            BACA MATERI & ULANGI KUIS
+          </button>
+        </div>
+      </section>
+
+      <!-- 5. MENU: GALERI FOTO & DOKUMENTASI SISWA (PER SITUS) -->
+      <section id="screen-gallery" class="screen-view hidden space-y-6">
+        <div
+          class="flex items-center justify-between glass-panel p-4 rounded-2xl"
+        >
+          <div>
+            <h2
+              class="text-lg md:text-xl font-bold font-cinzel text-yellow-400 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-camera-retro"></i> Galeri Foto & Dokumentasi
+              Siswa
+            </h2>
+            <p class="text-xs text-emerald-200">
+              Lihat foto resmi tiap situs atau unggah foto hasil studi
+              tur/kunjungan kamu sendiri!
+            </p>
+          </div>
+          <button
+            onclick="app.showScreen('home')"
+            class="text-emerald-300 hover:text-white px-3.5 py-1.5 rounded-xl bg-emerald-900/80 border border-emerald-700 text-xs font-semibold"
+          >
+            <i class="fa-solid fa-house mr-1"></i> Beranda
+          </button>
+        </div>
+
+        <!-- Site Filter Tabs -->
+        <div
+          id="gallery-tabs-container"
+          class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none"
+        >
+          <!-- Site filter pills rendered here -->
+        </div>
+
+        <!-- Gallery Cards Grid -->
+        <div
+          id="gallery-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+        >
+          <!-- Gallery items rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- 6. KOLEKSI CAGAR BUDAYA ALBUM SCREEN -->
+      <section id="screen-collection" class="screen-view hidden space-y-6">
+        <div
+          class="flex items-center justify-between glass-panel p-4 rounded-2xl"
+        >
+          <div>
+            <h2
+              class="text-lg md:text-xl font-bold font-cinzel text-yellow-400 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-trophy"></i> Album Koleksi 9 Cagar Budaya
+              Ngawi
+            </h2>
+            <p class="text-xs text-emerald-200">
+              Koleksi kartu informasi ilmiah dari setiap situs yang berhasil
+              diselesaikan.
+            </p>
+          </div>
+          <button
+            onclick="app.showScreen('home')"
+            class="text-emerald-300 hover:text-white px-3.5 py-1.5 rounded-xl bg-emerald-900/80 border border-emerald-700 text-xs font-semibold"
+          >
+            <i class="fa-solid fa-house mr-1"></i> Beranda
+          </button>
+        </div>
+
+        <!-- Collection Cards Grid -->
+        <div
+          id="collection-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+        >
+          <!-- Collection items rendered dynamically -->
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+      class="glass-panel border-t border-yellow-500/30 py-3 px-4 text-center text-[11px] text-emerald-300/80"
+    >
+      <div
+        class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2"
+      >
+        <p>
+          © 2026 Historian Quest — Media Pembelajaran Edukasi Situs Sejarah
+          Kabupaten Ngawi.
+        </p>
+        <p class="text-yellow-400 font-semibold">
+          Bangga Sejarah & Budaya Ngawi 🇮🇩
+        </p>
+      </div>
+    </footer>
+
+    <!-- MODAL POPUP: CUSTOM PROFILE & CHARACTER SELECTION -->
+    <div
+      id="profile-modal"
+      class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="glass-panel rounded-3xl max-w-md w-full p-6 space-y-5 border-2 border-yellow-400 relative"
+      >
+        <button
+          onclick="app.closeProfileModal()"
+          class="absolute top-4 right-4 text-emerald-300 hover:text-white text-xl"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="text-center space-y-1">
+          <h3 class="text-xl font-bold text-yellow-400 font-cinzel">
+            Profil & Karakter Penjelajah
+          </h3>
+          <p class="text-xs text-emerald-200">
+            Beri nama penjelajahmu dan pilih avatar yang kamu sukai!
+          </p>
+        </div>
+
+        <!-- Player Name Input -->
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold text-yellow-300"
+            >Nama Penjelajah:</label
+          >
+          <input
+            type="text"
+            id="input-player-name"
+            maxlength="18"
+            placeholder="Masukkan namamu..."
+            class="w-full bg-slate-950 border border-yellow-500/50 rounded-xl px-4 py-2.5 text-sm text-yellow-200 focus:outline-none focus:border-yellow-400"
+          />
+        </div>
+
+        <!-- Avatar Selection Grid -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-yellow-300"
+            >Pilih Karakter:</label
+          >
+          <div id="character-options-grid" class="grid grid-cols-2 gap-3">
+            <!-- 4 Character options dynamically generated -->
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button
+            onclick="app.saveProfileModal()"
+            class="btn-3d-gold w-full py-2.5 rounded-xl font-bold text-slate-950 text-sm"
+          >
+            Simpan Profil
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL POPUP: CARD DETAIL -->
+    <div
+      id="card-modal"
+      class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="glass-panel rounded-3xl max-w-lg w-full p-6 space-y-4 border-2 border-yellow-400 relative max-h-[90vh] overflow-y-auto"
+      >
+        <button
+          onclick="app.closeCardModal()"
+          class="absolute top-4 right-4 text-emerald-300 hover:text-white text-xl"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="flex items-center space-x-3">
+          <span
+            id="modal-card-icon"
+            class="text-3xl bg-yellow-500/20 p-2.5 rounded-xl"
+            >🏛️</span
+          >
+          <div>
+            <span
+              id="modal-card-era"
+              class="text-[10px] text-yellow-400 font-bold uppercase"
+              >ERA SEJARAH</span
+            >
+            <h3
+              id="modal-card-title"
+              class="text-lg font-bold text-white font-cinzel"
+            ></h3>
+          </div>
+        </div>
+
+        <!-- Modal Site Image Preview -->
+        <div
+          class="rounded-xl overflow-hidden border border-yellow-500/30 h-48 bg-slate-950"
+        >
+          <img
+            id="modal-card-img"
+            src=""
+            alt="Situs Sejarah"
+            class="w-full h-full object-cover"
+          />
+        </div>
+
+        <div
+          id="modal-card-desc"
+          class="text-xs text-emerald-100 leading-relaxed bg-emerald-950/90 p-4 rounded-xl border border-emerald-800 space-y-2"
+        ></div>
+
+        <div class="flex justify-end">
+          <button
+            onclick="app.closeCardModal()"
+            class="btn-3d-emerald px-5 py-2 rounded-xl text-xs font-bold"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOM TOAST MODAL (Replaces alert) -->
+    <div
+      id="toast-modal"
+      class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="glass-panel rounded-3xl max-w-sm w-full p-5 text-center space-y-4 border-2 border-yellow-400 relative"
+      >
+        <div id="toast-icon" class="text-4xl">⚠️</div>
+        <div class="space-y-1">
+          <h4
+            id="toast-title"
+            class="text-base font-bold text-yellow-300 font-cinzel"
+          >
+            Pemberitahuan
+          </h4>
+          <p
+            id="toast-message"
+            class="text-xs text-emerald-100 leading-relaxed"
+          ></p>
+        </div>
+        <button
+          onclick="app.closeToast()"
+          class="btn-3d-gold w-full py-2 rounded-xl font-bold text-slate-950 text-xs"
+        >
+          Mengerti
+        </button>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & DATA -->
+    <script src="app.js"></script>
+  </body>
+</html>
